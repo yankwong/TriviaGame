@@ -90,7 +90,6 @@
   height: 281px;
   width: 408px;
   margin: 0 auto;
-  /*border: 1px solid red;*/
   max-width: 100%;
   overflow: hidden;
 }
@@ -110,10 +109,23 @@
   height: 90%;
   padding: 0 20px;
 }
+@media (min-width: 768px) {
+  .monitor .question {
+    padding: 0 40px;
+  }
+}
+
 .monitor .question p {
   font-size: 20px;
   font-family: 'Shadows Into Light', cursive;
 }
+
+@media (min-width: 768px) {
+  .monitor .question p {
+    font-size: 25px;
+  }
+}
+
 .monitor .timer {
   display: flex;
   align-items: center;
@@ -162,6 +174,7 @@
   justify-content: center;
   align-items: center;
   color: black;
+  z-index: 2;
 }
 .waiting .logo {
   font-size: 40px;

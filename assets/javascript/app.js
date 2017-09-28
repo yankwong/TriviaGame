@@ -102,6 +102,8 @@ YTK.trivia = (function() {
       updateTimer();
       putTimer($timer);
     }, 1000);
+
+     // resetTimer();
   },
   initPage = function() {
     bindModeSelect();
@@ -391,9 +393,18 @@ YTK.trivia = (function() {
     resetTimer();
     startTimer($('.timer', '.monitor'));
   },
+  prep2PBtns = function(mode) {
+    if (mode > 0) {
+      var $p2Btns = $('.answer-btn', '.ui-right');
+      $p2Btns.addClass('btn-secondary');
+      $p2Btns.removeClass('btn-success');
+      $p2Btns.attr('disabled','disabled');
+    }
+  },
   startGame = function(mode) {
     putQuestionAnswers();
     bindAnswerBtns();
+    prep2PBtns(mode);
     startTurn(0);
     hideSection($('#section-1'));
     showSection($('#section-2'));
