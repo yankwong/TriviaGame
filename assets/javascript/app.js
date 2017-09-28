@@ -5,14 +5,59 @@ YTK.trivia = (function() {
   var 
   dataObj = [
     {
-      question  : 'Who is the pilot of Eva-01?',
+      question  : 'Who is the primary pilot of Evagelion unit-01?',
       answers   : ['Asuka', 'Shinji', 'Misato', 'Rei'],
       correct   : 1
     },
     {
-      question  : 'What is Garen\'s last name in League',
-      answers   : ['Crownguard', 'Demacia', 'Santo', 'Chen'],
+      question  : 'What is Garen\'s last name in League of Legends?',
+      answers   : ['Crownguard', 'Demacia', 'Santo', 'Freeman'],
       correct   : 0
+    },
+    {
+      question  : 'Which of these is not a character from Witcher?',
+      answers   : ['Ciri', 'Geralt', 'Ulfric', 'Emhyr'],
+      correct   : 2
+    },
+    {
+      question  : 'Which of these is the weakest in Horizon Zero Dawn?',
+      answers   : ['Thunderjaw', 'Stormbird', 'Corruptor', 'Grazer'],
+      correct   : 3
+    },
+    {
+      question  : 'Who is the protagonist of Horizon Zero Dawn?',
+      answers   : ['Aloy', 'Alloy', 'Ashly', 'Pocahontas'],
+      correct   : 0
+    },
+    {
+      question  : 'In Witcher 3, which of the following won\'t help you in the battle of Kaer Morhen?',
+      answers   : ['Letho', 'Eskel', 'Kiera', 'Dandelion'],
+      correct   : 3
+    },
+    {
+      question  : 'Who is not a member of the Lodge of Sorceresses?',
+      answers   : ['Triss', 'Ves', 'Keira', 'Ciri'],
+      correct   : 1
+    },
+    {
+      question  : 'Who can perform a double-jump in Fortnite?',
+      answers   : ['Soldier', 'Constructor', 'Ninja', 'Outlander'],
+      correct   : 2
+    },
+    {
+      question  : 'Which of these Overwatch characters is not Asian?',
+      answers   : ['D.Va', 'Symmetra', 'Mei', 'Ana'],
+      correct   : 3
+    },
+    {
+      question  : 'Which of these characters is not from Starcraft?',
+      answers   : ['Muradin', 'Tassadar', 'Zeratul', 'Abathur'],
+      correct   : 0
+    },
+    {
+      question  : 'Which of these Leguage of Legends character is from the Shadow Isles?',
+      answers   : ['Braum', 'Lux', 'Evelynn', 'Ashe'],
+      correct   : 2
     },
   ],
   currentDataObj,
@@ -26,21 +71,34 @@ YTK.trivia = (function() {
     p1wins : 0,
     p2wins : 0
   },
-  timerVal,
+  timerVal = 7,
+  timerInterval,
   getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
   putTimer = function($timer) {
-    $timer.html(timerVal);
+    $timer.html('00:0' + timerVal);
+
+    if (timerVal <= 0) {
+      resetTimer();
+
+      // mimic an answer btn click
+      $('.answer-4', '.active').click();
+    }
+  },
+  pauseTimer = function() {
+    clearInterval(timerInterval);
   },
   resetTimer = function() {
-    timerVal = 5;
+    pauseTimer();
+    timerVal = 7;
   },
   updateTimer = function() {
     timerVal--;
   },
   startTimer = function($timer){
-    setTimeout(function() {
+    putTimer($timer);
+    timerInterval = setInterval(function() {
       updateTimer();
       putTimer($timer);
     }, 1000);
@@ -134,17 +192,21 @@ YTK.trivia = (function() {
   startWait = function(playerID) {
     if (playerID == 0) {
       $('.waiting', '.ui-left').removeClass('hidden');
+      $('.ui-left').removeClass('active');
     }
     else {
      $('.waiting', '.ui-right').removeClass('hidden'); 
+     $('.ui-right').removeClass('active');
     }
   },
   clearWait = function(playerID) {
     if (playerID == 0) {
       $('.waiting', '.ui-left').addClass('hidden');
+      $('.ui-left').addClass('active');
     }
     else {
      $('.waiting', '.ui-right').addClass('hidden'); 
+     $('.ui-right').addClass('active');
     }
   },
   bindAnswerBtns = function() {
@@ -152,6 +214,8 @@ YTK.trivia = (function() {
       var $this = $(this),
           ansID = parseInt($this.attr('data-type'));
 
+      pauseTimer();
+      
       // player 1
       if ($this.closest('.ui-left').length) {
         currentRoundStat.p1correct = isCorrect(ansID);
@@ -164,6 +228,7 @@ YTK.trivia = (function() {
         updateResultBar();
 
         if (gameEnded()) {
+          initEndResult();
           displayEndResult();
         }
         else {
@@ -181,8 +246,35 @@ YTK.trivia = (function() {
     gameStats.p1wins += currentRoundStat.p1correct;
     gameStats.p2wins += currentRoundStat.p2correct;
   },
+  setup2PIcon = function($icon) {
+    if (gameStats.mode == 0) {
+      $icon.addClass('ai-2p');
+    }
+    else {
+      $icon.addClass('ai-' + (gameStats.mode - 1));
+    }
+  },
   setupResultModal = function() {
-    console.log('result', gameStats);
+    var $titleDiv   = $('.modal-title', '#resultModal'),
+        $resultDiv  = $('.result-text', '#resultModal'),
+        $p2Icon     = $('.enemy-icon .ai', '#resultModal');
+
+    if (currentRoundStat.p1correct && currentRoundStat.p2correct) {
+      $titleDiv.html('You both got it right!')
+    }
+    else if (currentRoundStat.p1correct) {
+      $titleDiv.html('You got it right!')
+    }
+    else if (currentRoundStat.p2correct) {
+      $titleDiv.html('2P got it right!')
+    }
+    else {
+      $titleDiv.html('Nobody got it right!')
+    }
+
+    setup2PIcon($p2Icon);
+
+    $resultDiv.html('<p>' + gameStats.p1wins + ' : ' + gameStats.p2wins + '</p>');
   },
   updateResultBar = function() {
     var resultID = gameStats.total - 1,
@@ -215,8 +307,42 @@ YTK.trivia = (function() {
       }, 3000);
     });
   },
+  bindPlayAgainBtn = function($btn) {
+    $btn.on('click', function() {
+      window.location.href = "index.html";
+    });
+  },
+  bindShareBtn = function($btn) {
+    $btn.on('click', function() {
+      window.location.href = "https://www.facebook.com/sharer/sharer.php?u=https://yankwong.github.io/TriviaGame/";
+    })
+  },
+  initEndResult = function() {
+    var $titleDiv   = $('.modal-title', '#endModal'),
+        $resultDiv  = $('.result-text', '#endModal'),
+        $p2Icon     = $('.enemy-icon .ai', '#endModal');
+
+    if (gameStats.p1wins > gameStats.p2wins) {
+      $titleDiv.html('Player 1 won the game!');
+    }
+    else if (gameStats.p2wins > gameStats.p1wins) {
+      $titleDiv.html('Player 2 won the game!'); 
+    }
+    else {
+      $titleDiv.html('Draw game!');  
+    }
+    $resultDiv.html('<p>' + gameStats.p1wins + ' : ' + gameStats.p2wins + '</p>');
+
+    setup2PIcon($p2Icon);
+    bindPlayAgainBtn($('.play-again', '#endModal'));
+    bindShareBtn($('.btn-fb-share'));
+
+    $('#endModal').on('hidden.bs.modal', function (e) {
+      window.location.href = "index.html";
+    });
+  },
   displayEndResult = function() {
-    console.log('game ended');
+    $('#endModal').modal('show');
   },
   startTurn = function(playerID){
     if (playerID == 0) {
@@ -227,6 +353,8 @@ YTK.trivia = (function() {
       startWait(0);
       clearWait(1);
     }
+    resetTimer();
+    startTimer($('.timer', '.monitor'));
   },
   startGame = function(mode) {
     putQuestionAnswers();

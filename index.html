@@ -9,7 +9,7 @@
     <meta property="og:image" content="https://yankwong.github.io/TriviaGame/assets/images/og_img.jpg" />
 
     <link rel="icon" href="assets/images/favicon.png" type="image/x-icon" />
-    <link href="https://fonts.googleapis.com/css?family=Coming+Soon" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Coming+Soon|Shadows+Into+Light" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -46,12 +46,15 @@
 
     <section id="section-2" class="container game-start hidden">
       <div class="question-area">
-        <div class="monitor"><div class="question"></div></div>
+        <div class="monitor">
+          <div class="question"></div>
+          <div class="timer"></div>
+        </div>
       </div>
       <div class="answer-wrapper row">
         <div class="col-6 ui-left">
           <div class="waiting">
-            <div class="logo"><i class="fa fa-hand-o-right" aria-hidden="true"></i></div>
+            <div class="logo"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></div>
             <p>Waiting for Player 2</p>
           </div>
           <h6 class="p1-name">Player 1</h6>
@@ -60,10 +63,11 @@
           <button type="button" class="btn answer-btn btn-info answer-1" data-type="1"></button>
           <button type="button" class="btn answer-btn btn-info answer-2" data-type="2"></button>
           <button type="button" class="btn answer-btn btn-info answer-3" data-type="3"></button>
+          <button type="button" class="btn answer-btn btn-info answer-4" data-type="4" aria-hidden="true"></button>
         </div>
         <div class="col-6 ui-right">
           <div class="waiting">
-            <div class="logo"><i class="fa fa-hand-o-left" aria-hidden="true"></i></div>
+            <div class="logo"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></div>
             <p>Waiting for Player 1</p>
           </div>
           <h6 ckass="p2-name">Player 2</h6>
@@ -72,6 +76,7 @@
           <button type="button" class="btn answer-btn btn-success answer-1" data-type="1"></button>
           <button type="button" class="btn answer-btn btn-success answer-2" data-type="2"></button>
           <button type="button" class="btn answer-btn btn-success answer-3" data-type="3"></button>
+          <button type="button" class="btn answer-btn btn-info answer-4" data-type="4" aria-hidden="true"></button>
         </div>
       </div>
     </section>
@@ -79,10 +84,48 @@
     <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="title"></h5>
+          </div>
           <div class="modal-body">
-            <div class="ai ai-0"></div> 
-            <div class="ai ai-1"></div>
-            <div class="result-text"></div>
+            <div class="row avatar-row">
+              <div class="col-6 player-icon">
+                <div class="ai ai-user"></div> 
+              </div>
+              <div class="col-6 enemy-icon">
+                <div class="ai"></div>
+              </div>
+            </div>
+            <div class="row result-row">
+              <div class="result-text"></div>  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="title"></h5>
+          </div>
+          <div class="modal-body">
+            <div class="row avatar-row">
+              <div class="col-6 player-icon">
+                <div class="ai ai-user"></div> 
+              </div>
+              <div class="col-6 enemy-icon">
+                <div class="ai"></div>
+              </div>
+            </div>
+            <div class="row result-row">
+              <div class="result-text"></div>  
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-fb-share btn-secondary"><i class="fa fa-facebook-official" aria-hidden="true"></i> Share</button>
+            <button type="button" class="play-again btn btn-primary">Play Again</button>
           </div>
         </div>
       </div>
