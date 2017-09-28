@@ -226,7 +226,7 @@ YTK.trivia = (function() {
   },
   aiPlay = function() {
     var aiID = gameStats.mode - 1,
-        thinkTime = getRandomInt(1000, 2000),
+        thinkTime = getRandomInt(300, 1000),
         correct = aiCorrect(aiID);
 
     if (correct) {
