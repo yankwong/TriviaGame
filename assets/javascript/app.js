@@ -135,7 +135,7 @@ YTK.trivia = (function() {
     });
   },
   bindAISelect = function() {
-    var $ai = $('.ai', '#mode-select');
+    var $ai = $('.ai', '.ai-select');
 
     $ai.on('click', function() {
       var aiID = parseInt($(this).attr('data-id'));
@@ -209,17 +209,52 @@ YTK.trivia = (function() {
      $('.ui-right').addClass('active');
     }
   },
+  aiCorrect = function(aiID) {
+    var randNum = getRandomInt(1, 10);
+
+    if (aiID == 0) { //60%
+      return randNum > 4;
+    }
+    else if (aiID == 1) { //80%
+      return randNum > 2;
+    }
+    else { //90%
+      return randNum > 1;
+    }
+
+  },
+  aiPlay = function() {
+    var aiID = gameStats.mode - 1,
+        thinkTime = getRandomInt(1000, 2000),
+        correct = aiCorrect(aiID);
+
+    if (correct) {
+      setTimeout(function() {
+        $('.answer-' + currentDataObj[0].correct, '.active').click();
+      }, thinkTime);
+    }
+    else {
+     setTimeout(function() {
+        $('.answer-4', '.active').click();
+      }, thinkTime); 
+    }
+
+  },
   bindAnswerBtns = function() {
     $('.answer-btn').off('click').on('click', function() {
       var $this = $(this),
           ansID = parseInt($this.attr('data-type'));
 
       pauseTimer();
-      
+
       // player 1
       if ($this.closest('.ui-left').length) {
         currentRoundStat.p1correct = isCorrect(ansID);
         startTurn(1);
+
+        if (gameStats.mode !== 0) {
+          aiPlay();
+        }
       }
       else {
         currentRoundStat.p2correct = isCorrect(ansID);
