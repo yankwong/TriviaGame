@@ -354,20 +354,34 @@ YTK.trivia = (function() {
       window.location.href = "https://www.facebook.com/sharer/sharer.php?u=https://yankwong.github.io/TriviaGame/";
     })
   },
+  isVSAI = function() {
+    return gameStats.mode > 0;
+  },
   initEndResult = function() {
     var $titleDiv   = $('.modal-title', '#endModal'),
         $resultDiv  = $('.result-text', '#endModal'),
         $p2Icon     = $('.enemy-icon .ai', '#endModal');
 
     if (gameStats.p1wins > gameStats.p2wins) {
-      $titleDiv.html('Player 1 won the game!');
+      if (isVSAI()) {
+        $titleDiv.html('You beat the AI!');
+      }
+      else {
+        $titleDiv.html('Player 1 wins!');
+      }
     }
     else if (gameStats.p2wins > gameStats.p1wins) {
-      $titleDiv.html('Player 2 won the game!'); 
+      if (isVSAI()) {
+        $titleDiv.html('The AI has won!');
+      }
+      else {
+        $titleDiv.html('Player 2 wins!');   
+      }
     }
     else {
       $titleDiv.html('Draw game!');  
     }
+    
     $resultDiv.html('<p>' + gameStats.p1wins + ' : ' + gameStats.p2wins + '</p>');
 
     setup2PIcon($p2Icon);
