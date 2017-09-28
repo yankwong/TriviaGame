@@ -55,7 +55,7 @@ YTK.trivia = (function() {
       correct   : 0
     },
     {
-      question  : 'Which of these Leguage of Legends character is from the Shadow Isles?',
+      question  : 'Which of these League of Legends character is from the Shadow Isles?',
       answers   : ['Braum', 'Lux', 'Evelynn', 'Ashe'],
       correct   : 2
     },
@@ -73,6 +73,7 @@ YTK.trivia = (function() {
   },
   timerVal = 7,
   timerInterval,
+  currentTimeOut,
   getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
@@ -103,7 +104,7 @@ YTK.trivia = (function() {
       putTimer($timer);
     }, 1000);
 
-     // resetTimer();
+      resetTimer();
   },
   initPage = function() {
     bindModeSelect();
@@ -309,6 +310,11 @@ YTK.trivia = (function() {
       $titleDiv.html('Nobody got it right!')
     }
 
+    $('#resultModal').on('hidden.bs.modal', function() {
+      clearTimeout(currentTimeOut);
+      startGame(gameStats.mode);
+    });
+    
     setup2PIcon($p2Icon);
 
     $resultDiv.html('<p>' + gameStats.p1wins + ' : ' + gameStats.p2wins + '</p>');
@@ -338,10 +344,10 @@ YTK.trivia = (function() {
     $resultModal.modal('show');
 
     $resultModal.on('shown.bs.modal', function() {
-      setTimeout(function() {
+      currentTimeOut = setTimeout(function() {
         $resultModal.modal('hide');
-        startGame(gameStats.mode);
-      }, 3000);
+        // startGame(gameStats.mode);
+      }, 2000);
     });
   },
   bindPlayAgainBtn = function($btn) {
@@ -381,7 +387,7 @@ YTK.trivia = (function() {
     else {
       $titleDiv.html('Draw game!');  
     }
-    
+
     $resultDiv.html('<p>' + gameStats.p1wins + ' : ' + gameStats.p2wins + '</p>');
 
     setup2PIcon($p2Icon);
