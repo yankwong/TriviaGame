@@ -103,8 +103,6 @@ YTK.trivia = (function() {
       updateTimer();
       putTimer($timer);
     }, 1000);
-
-      resetTimer();
   },
   initPage = function() {
     bindModeSelect();
@@ -215,14 +213,14 @@ YTK.trivia = (function() {
   aiCorrect = function(aiID) {
     var randNum = getRandomInt(1, 10);
 
-    if (aiID == 0) { //60%
+    if (aiID == 0) { //30%
+      return randNum > 7;
+    }
+    else if (aiID == 1) { //60%
       return randNum > 4;
     }
-    else if (aiID == 1) { //80%
+    else { //80%
       return randNum > 2;
-    }
-    else { //90%
-      return randNum > 1;
     }
 
   },
@@ -314,7 +312,7 @@ YTK.trivia = (function() {
       clearTimeout(currentTimeOut);
       startGame(gameStats.mode);
     });
-    
+
     setup2PIcon($p2Icon);
 
     $resultDiv.html('<p>' + gameStats.p1wins + ' : ' + gameStats.p2wins + '</p>');
@@ -346,7 +344,6 @@ YTK.trivia = (function() {
     $resultModal.on('shown.bs.modal', function() {
       currentTimeOut = setTimeout(function() {
         $resultModal.modal('hide');
-        // startGame(gameStats.mode);
       }, 2000);
     });
   },
