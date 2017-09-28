@@ -26,7 +26,6 @@
 }
 #section-2 {
   min-height: 800px;
-  padding-top: 55px;
 }
 .game-title {
   font-family: 'Coming Soon', cursive;
@@ -110,9 +109,9 @@
   overflow: hidden;
 }
 @media (min-width: 1200px) {
-  .ui-left {
+  .ui-left, .header-ui {
     padding-left: 60px;
-  }  
+  }
 }
 
 .answer-4 {

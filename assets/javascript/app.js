@@ -103,6 +103,8 @@ YTK.trivia = (function() {
       updateTimer();
       putTimer($timer);
     }, 1000);
+
+    // pauseTimer(); // debug
   },
   initPage = function() {
     bindModeSelect();
